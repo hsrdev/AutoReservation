@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option csharp_namespace = "AutoReservation.Service.Grpc";
+
+package AutoReservation;
+
+service AutoService {
+}

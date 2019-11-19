@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="..\Assets\appsettings.json" Link="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="..\_Protos\auto.proto" />
+    <None Remove="..\_Protos\kunde.proto" />
+    <None Remove="..\_Protos\reservation.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="..\_Protos\auto.proto" GrpcServices="Server" ProtoRoot="..\_Protos" Access="Internal">
+      <Link>Protos\auto.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\_Protos\kunde.proto" GrpcServices="Server" ProtoRoot="..\_Protos" Access="Internal">
+      <Link>Protos\kunde.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\_Protos\reservation.proto" GrpcServices="Server" ProtoRoot="..\_Protos" Access="Internal">
+      <Link>Protos\reservation.proto</Link>
+    </Protobuf>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.24.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AutoReservation.BusinessLayer\AutoReservation.BusinessLayer.csproj" />
+  </ItemGroup>
+
+</Project>

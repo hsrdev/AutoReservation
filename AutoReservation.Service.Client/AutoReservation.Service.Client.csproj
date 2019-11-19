@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="..\_Protos\auto.proto" />
+    <None Remove="..\_Protos\kunde.proto" />
+    <None Remove="..\_Protos\reservation.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="..\_Protos\auto.proto" GrpcServices="Client" ProtoRoot="..\_Protos">
+      <Link>Protos\auto.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\_Protos\kunde.proto" GrpcServices="Client" ProtoRoot="..\_Protos">
+      <Link>Protos\kunde.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\_Protos\reservation.proto" GrpcServices="Client" ProtoRoot="..\_Protos">
+      <Link>Protos\reservation.proto</Link>
+    </Protobuf>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.10.1" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.25.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.25.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>

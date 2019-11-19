@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="AutoReservation.BusinessLayer.ReservationManager">
+    <Position X="9.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEAAAAAAAAAAAAAAAAIAAAEAAACAAAAAAAAAAII=</HashCode>
+      <FileName>ReservationManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AutoReservation.BusinessLayer.ManagerBase" Collapsed="true">
+    <Position X="11.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAA=</HashCode>
+      <FileName>ManagerBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AutoReservation.BusinessLayer.AutoManager">
+    <Position X="11.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
+      <FileName>AutoManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AutoReservation.BusinessLayer.KundeManager">
+    <Position X="14" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAII=</HashCode>
+      <FileName>KundeManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

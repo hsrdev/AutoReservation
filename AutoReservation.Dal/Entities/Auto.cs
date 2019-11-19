@@ -1,0 +1,4 @@
+namespace AutoReservation.Dal.Entities
+{
+
+}
