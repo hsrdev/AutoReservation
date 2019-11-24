@@ -14,7 +14,7 @@ namespace AutoReservation.TestEnvironment
         private static bool _firstTestInExecution = true;
         private static readonly object LockObject = new object();
 
-        public TestDataHelperSqlServer(AutoReservationContext context)
+        public TestDataHelperSqlServer(CarReservationContext context)
             : base(context) { }
 
         /// <summary>
@@ -42,11 +42,11 @@ namespace AutoReservation.TestEnvironment
 
         protected void CleanupData()
         {
-            string luxusklasseAutoTableName = GetTableName<LuxusklasseAuto>();
-            string mittelklasseAutoTableName = GetTableName<MittelklasseAuto>();
-            string standardAutoTableName = GetTableName<StandardAuto>();
-            string autoTableName = GetTableName<Auto>();
-            string kundeTableName = GetTableName<Kunde>();
+            string luxusklasseAutoTableName = GetTableName<LuxuryClassCar>();
+            string mittelklasseAutoTableName = GetTableName<MidClassCar>();
+            string standardAutoTableName = GetTableName<StandardCar>();
+            string autoTableName = GetTableName<Car>();
+            string kundeTableName = GetTableName<Customer>();
             string reservationTableName = GetTableName<Reservation>();
 
             // Delete all records from tables

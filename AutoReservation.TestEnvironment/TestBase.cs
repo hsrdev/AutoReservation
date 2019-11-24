@@ -20,8 +20,7 @@ namespace AutoReservation.TestEnvironment
         /// </summary>
         private void InitializeTestEnvironment()
         {
-            using AutoReservationContext context = new AutoReservationContext();
-
+            using CarReservationContext context = new CarReservationContext();
             TestDataHelper testDataHelper;
             if (context.Database.IsInMemory())
             {

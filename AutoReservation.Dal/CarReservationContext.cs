@@ -6,6 +6,14 @@ namespace AutoReservation.Dal
 {
     public class CarReservationContext : CarReservationContextBase
     {
+        public DbSet<Car> Cars { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
+
+        public CarReservationContext()
+        {
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             CreateCarTable(modelBuilder);
@@ -18,14 +26,15 @@ namespace AutoReservation.Dal
             modelBuilder.ApplyConfiguration(
                 new CarTypeConfig()
             );
-            var carBuilder = modelBuilder.Entity<Car>();
-            carBuilder.ToTable("Cars");
-            carBuilder.HasKey(e => e.Id).HasName("Id");
-            carBuilder.Property(e => e.BaseRate).HasColumnName("BaseRate");
-            carBuilder.Property(e => e.CarClass).HasColumnName("CarClass");
-            carBuilder.Property(e => e.DailyRate).HasColumnName("DailyRate");
-            carBuilder.Property(e => e.Make).HasColumnName("Make").HasColumnType("NVARCHAR(20)");
-            carBuilder.Property(e => e.RowVersion).HasColumnName("RowVersion").HasColumnType("TIMESTAMP");
+            modelBuilder.Entity<Car>()
+                .ToTable("Cars");
+            modelBuilder.Entity<StandardCar>()
+                .HasBaseType<Car>();
+            modelBuilder.Entity<LuxuryClassCar>()
+                .HasBaseType<Car>();
+            modelBuilder.Entity<MidClassCar>()
+                .HasBaseType<Car>();
+
         }
 
         private void CreateCustomerTable(ModelBuilder modelBuilder)
@@ -33,12 +42,8 @@ namespace AutoReservation.Dal
             modelBuilder.ApplyConfiguration(
                 new CustomerTypeConfig()
             );
-            var customerBuilder = modelBuilder.Entity<Customer>();
-            customerBuilder.HasKey(e => e.Id).HasName("Id");
-            customerBuilder.Property(e => e.BirthDate).HasColumnName("BirthDate").HasColumnType("DATETIME2(7)");
-            customerBuilder.Property(e => e.FirstName).HasColumnName("FirstName").HasColumnType("NVARCHAR(20)");
-            customerBuilder.Property(e => e.LastName).HasColumnName("LastName").HasColumnType("NVARCHAR(20)");
-            customerBuilder.Property(e => e.RowVersion).HasColumnName("RowVersion").HasColumnType("TIMESTAMP");
+            modelBuilder.Entity<Customer>()
+                .ToTable("Customer");
         }
 
         private void CreateReservationTable(ModelBuilder modelBuilder)
@@ -48,12 +53,10 @@ namespace AutoReservation.Dal
             );
             var reservationBuilder = modelBuilder.Entity<Reservation>();
             reservationBuilder.HasKey(e => e.ReservationNr).HasName("Id");
-            reservationBuilder.Property(e => e.From).HasColumnName("FromDate").HasColumnType("DATETIME2(7)");
-            reservationBuilder.Property(e => e.To).HasColumnName("ToDate").HasColumnType("DATETIME2(7)");
             reservationBuilder.HasOne(e => e.Customer).WithMany(c => c.Reservations).HasForeignKey(e => e.CustomerId)
-                .HasConstraintName("FK_Reservation_CustomerId");
+                .HasConstraintName("FK_Reservation_CustomerId").IsRequired();
             reservationBuilder.HasOne(e => e.Car).WithMany(c => c.Reservations).HasForeignKey(e => e.CarId)
-                .HasConstraintName("FK_Reservation_CarId");
+                .HasConstraintName("FK_Reservation_CarId").IsRequired();
         }
     }
 

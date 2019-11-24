@@ -5,7 +5,7 @@ namespace AutoReservation.TestEnvironment
     public class TestDataHelperInMemory
         : TestDataHelper
     {
-        public TestDataHelperInMemory(AutoReservationContext context)
+        public TestDataHelperInMemory(CarReservationContext context)
             : base(context) { }
 
         /// <summary>
