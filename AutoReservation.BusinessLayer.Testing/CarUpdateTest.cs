@@ -16,7 +16,7 @@ namespace AutoReservation.BusinessLayer.Testing
         }
 
         [Fact]
-        public async Task UpdateAutoTest()
+        public async Task UpdateCarTest()
         {
             throw new NotImplementedException("Test not implemented.");
             // arrange

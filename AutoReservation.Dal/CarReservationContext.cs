@@ -23,70 +23,43 @@ namespace AutoReservation.Dal
 
         private void CreateCarTable(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(
-                new CarTypeConfig()
-            );
             modelBuilder.Entity<Car>()
-                .ToTable("Cars");
+                .ToTable("Cars")
+                .Property(e => e.RowVersion)
+                .IsRowVersion();
             modelBuilder.Entity<StandardCar>()
                 .HasBaseType<Car>();
             modelBuilder.Entity<LuxuryClassCar>()
                 .HasBaseType<Car>();
             modelBuilder.Entity<MidClassCar>()
                 .HasBaseType<Car>();
-
         }
 
         private void CreateCustomerTable(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(
-                new CustomerTypeConfig()
-            );
             modelBuilder.Entity<Customer>()
-                .ToTable("Customer");
+                .ToTable("Customers")
+                .Property(e => e.RowVersion).IsRowVersion();
         }
 
         private void CreateReservationTable(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(
-                new ReservationTypConfig()
-            );
-            var reservationBuilder = modelBuilder.Entity<Reservation>();
-            reservationBuilder.HasKey(e => e.ReservationNr).HasName("Id");
-            reservationBuilder.HasOne(e => e.Customer).WithMany(c => c.Reservations).HasForeignKey(e => e.CustomerId)
-                .HasConstraintName("FK_Reservation_CustomerId").IsRequired();
-            reservationBuilder.HasOne(e => e.Car).WithMany(c => c.Reservations).HasForeignKey(e => e.CarId)
-                .HasConstraintName("FK_Reservation_CarId").IsRequired();
-        }
-    }
-
-    internal class CarTypeConfig : IEntityTypeConfiguration<Car>
-    {
-        public void Configure(
-            EntityTypeBuilder<Car> builder)
-        {
-            builder
-                .Property(p => p.RowVersion).IsRowVersion();
-        }
-    }
-
-    internal class CustomerTypeConfig : IEntityTypeConfiguration<Customer>
-    {
-        public void Configure(
-            EntityTypeBuilder<Customer> builder)
-        {
-            builder
-                .Property(p => p.RowVersion).IsRowVersion();
-        }
-    }
-
-    internal class ReservationTypConfig : IEntityTypeConfiguration<Reservation>
-    {
-        public void Configure(
-            EntityTypeBuilder<Reservation> builder)
-        {
-            builder
-                .Property(p => p.RowVersion).IsRowVersion();
+            var reservationBuilder = modelBuilder.Entity<Reservation>()
+                .ToTable("Reservations");
+            reservationBuilder.HasKey(e => e.ReservationNr)
+                .HasName("Id");
+            reservationBuilder.HasOne(e => e.Customer)
+                .WithMany(c => c.Reservations)
+                .HasForeignKey(e => e.CustomerId)
+                .HasConstraintName("FK_Reservation_CustomerId")
+                .IsRequired();
+            reservationBuilder.HasOne(e => e.Car)
+                .WithMany(c => c.Reservations)
+                .HasForeignKey(e => e.CarId)
+                .HasConstraintName("FK_Reservation_CarId")
+                .IsRequired();
+            reservationBuilder.Property(e => e.RowVersion)
+                .IsRowVersion();
         }
     }
 }

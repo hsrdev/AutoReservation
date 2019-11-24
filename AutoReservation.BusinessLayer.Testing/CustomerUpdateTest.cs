@@ -5,18 +5,18 @@ using Xunit;
 
 namespace AutoReservation.BusinessLayer.Testing
 {
-    public class KundeUpdateTest
+    public class CustomerUpdateTest
         : TestBase
     {
         private readonly KundeManager _target;
 
-        public KundeUpdateTest()
+        public CustomerUpdateTest()
         {
             _target = new KundeManager();
         }
         
         [Fact]
-        public async Task UpdateKundeTest()
+        public async Task UpdateCustomerTest()
         {
             throw new NotImplementedException("Test not implemented.");
             // arrange
