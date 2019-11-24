@@ -10,10 +10,6 @@ namespace AutoReservation.Dal
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
 
-        public CarReservationContext()
-        {
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             CreateCarTable(modelBuilder);
@@ -39,7 +35,8 @@ namespace AutoReservation.Dal
         {
             modelBuilder.Entity<Customer>()
                 .ToTable("Customers")
-                .Property(e => e.RowVersion).IsRowVersion();
+                .Property(e => e.RowVersion)
+                .IsRowVersion();
         }
 
         private void CreateReservationTable(ModelBuilder modelBuilder)

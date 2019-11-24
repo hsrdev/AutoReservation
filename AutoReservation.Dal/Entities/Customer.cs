@@ -10,7 +10,7 @@ namespace AutoReservation.Dal.Entities
         public string LastName { get; set; }
         public string FirstName { get; set; }
         public DateTime BirthDate { get; set; }
-        public DateTime RowVersion { get; set; }
+        public byte[] RowVersion { get; set; }
         public ICollection<Reservation> Reservations { get; set; }
     }
 }

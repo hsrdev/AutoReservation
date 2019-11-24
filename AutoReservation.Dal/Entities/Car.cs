@@ -10,7 +10,7 @@ namespace AutoReservation.Dal.Entities
         public int Id { get; set; }
         public string Make { get; set; }
         public int DailyRate { get; set; }
-        public DateTime RowVersion { get; set; }
+        public byte[] RowVersion { get; set; }
         public int CarClass { get; set; }
         public ICollection<Reservation> Reservations { get; set; }
     }
