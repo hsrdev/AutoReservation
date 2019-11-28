@@ -6,13 +6,6 @@ namespace AutoReservation.Dal.Entities
 {
     public class Car
     {
-        public Car(string make, int dailyRate, Reservation reservation)
-        {
-            Make = make;
-            DailyRate = dailyRate;
-            Reservations.Add(reservation);
-        }
-
         //PrimaryKey
         public int Id { get; set; }
         public string Make { get; set; }

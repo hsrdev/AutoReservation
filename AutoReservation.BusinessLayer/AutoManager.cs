@@ -26,7 +26,7 @@ namespace AutoReservation.BusinessLayer
             return context.Cars.Single(c => c.Id == primaryKey);
         }
 
-        public async void Insert(Car car)
+        public async Task Insert(Car car)
         {
             await using (CarReservationContext context = new CarReservationContext())
             {
@@ -35,7 +35,7 @@ namespace AutoReservation.BusinessLayer
             }
         }
 
-        public async void Update(Car car)
+        public async Task Update(Car car)
         {
             await using (CarReservationContext context = new CarReservationContext())
             {
@@ -53,7 +53,7 @@ namespace AutoReservation.BusinessLayer
             }
         }
 
-        public async void Delete(int id)
+        public async Task Delete(int id)
         {
             await using (CarReservationContext context = new CarReservationContext())
             {

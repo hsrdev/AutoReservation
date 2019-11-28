@@ -11,7 +11,6 @@ namespace AutoReservation.BusinessLayer.Testing
     {
         private readonly AutoManager _target;
         public Car Car { get; set; }
-        public Reservation Reservation { get; set; }
 
         public AutoUpdateTests()
         {
@@ -19,12 +18,26 @@ namespace AutoReservation.BusinessLayer.Testing
         }
 
         [Fact]
+        public async Task InsertCarTest()
+        {
+            Car = new LuxuryClassCar()
+            {
+                Make = "Volvo",
+                DailyRate = 100
+            };
+            await _target.Insert(Car);
+            var insertedCar = await _target.Get(Car.Id);
+            Assert.Equal(Car.Id, insertedCar.Id);
+        }
+
+        [Fact]
         public async Task UpdateCarTest()
         {
-            throw new NotImplementedException("Test not implemented.");
-            // arrange
-            // act
-            // assert
+            Car = await _target.Get(5);
+            Car.DailyRate = 500;
+            await _target.Update(Car);
+            var updatedCar = await _target.Get(Car.Id);
+            Assert.Equal(Car.DailyRate, updatedCar.DailyRate);
         }
     }
 }
