@@ -4,6 +4,12 @@ namespace AutoReservation.Dal.Entities
 {
     public class Reservation
     {
+        public Reservation(DateTime from, DateTime to)
+        {
+            From = from;
+            To = to;
+        }
+
         //PrimaryKey
         public int ReservationNr { get; set; }
         //ForeignKey

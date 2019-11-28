@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AutoReservation.Dal.Entities;
 using AutoReservation.TestEnvironment;
 using Xunit;
 
@@ -9,6 +10,8 @@ namespace AutoReservation.BusinessLayer.Testing
         : TestBase
     {
         private readonly AutoManager _target;
+        public Car Car { get; set; }
+        public Reservation Reservation { get; set; }
 
         public AutoUpdateTests()
         {
