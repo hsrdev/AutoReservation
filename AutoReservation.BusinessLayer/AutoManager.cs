@@ -53,12 +53,11 @@ namespace AutoReservation.BusinessLayer
             }
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(Car car)
         {
             await using (CarReservationContext context = new CarReservationContext())
             {
-                Car target = context.Cars.Single(c => c.Id == id);
-                context.Entry(target).State = EntityState.Deleted;
+                context.Entry(car).State = EntityState.Deleted;
                 context.SaveChanges();
             }
         }

@@ -20,23 +20,29 @@ namespace AutoReservation.BusinessLayer.Testing
         [Fact]
         public async Task InsertCarTest()
         {
-            Car = new LuxuryClassCar()
+            //arrange
+            Car = new StandardCar()
             {
-                Make = "Volvo",
+                Make = "Volvo V40",
                 DailyRate = 100
             };
+            //act
             await _target.Insert(Car);
             var insertedCar = await _target.Get(Car.Id);
+            //assert
             Assert.Equal(Car.Id, insertedCar.Id);
         }
 
         [Fact]
         public async Task UpdateCarTest()
         {
-            Car = await _target.Get(5);
+            //arrange
+            Car = await _target.Get(2);
             Car.DailyRate = 500;
+            //act
             await _target.Update(Car);
             var updatedCar = await _target.Get(Car.Id);
+            //assert
             Assert.Equal(Car.DailyRate, updatedCar.DailyRate);
         }
     }
