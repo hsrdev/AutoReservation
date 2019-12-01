@@ -9,12 +9,12 @@ namespace AutoReservation.BusinessLayer.Testing
     public class AutoUpdateTests
         : TestBase
     {
-        private readonly AutoManager _target;
+        private readonly CarManager _target;
         public Car Car { get; set; }
 
         public AutoUpdateTests()
         {
-            _target = new AutoManager();
+            _target = new CarManager();
         }
 
         [Fact]
@@ -26,24 +26,56 @@ namespace AutoReservation.BusinessLayer.Testing
                 Make = "Volvo V40",
                 DailyRate = 100
             };
-            //act
+            // act
             await _target.Insert(Car);
             var insertedCar = await _target.Get(Car.Id);
-            //assert
+            // assert
             Assert.Equal(Car.Id, insertedCar.Id);
         }
 
         [Fact]
         public async Task UpdateCarTest()
         {
-            //arrange
+            // arrange
             Car = await _target.Get(2);
             Car.DailyRate = 500;
-            //act
+            // act
             await _target.Update(Car);
             var updatedCar = await _target.Get(Car.Id);
             //assert
             Assert.Equal(Car.DailyRate, updatedCar.DailyRate);
+        }
+
+        [Fact]
+        public async Task NotExistingAccessTest()
+        {
+            try
+            {
+                // arrange & act
+                Car = await _target.Get(5);
+            }
+            catch (Exception e)
+            {
+                // assert
+                Assert.Equal("Sequence contains no elements", e.Message);
+            }
+        }
+
+        [Fact]
+        public async Task DeleteCarTest()
+        {
+            try
+            {
+                // arrange
+                Car = await _target.Get(1);
+                // act
+                await _target.Delete(Car);
+                var deletedCar = _target.Get(Car.Id);
+            }
+            catch (Exception e)
+            {
+                Assert.Equal("Sequence contains no elements", e.Message);
+            }
         }
     }
 }

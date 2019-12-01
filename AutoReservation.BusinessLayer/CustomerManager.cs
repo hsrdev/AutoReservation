@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace AutoReservation.BusinessLayer
 {
-    public class KundeManager
+    public class CustomerManager
         : ManagerBase
     {
      

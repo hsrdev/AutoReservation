@@ -8,11 +8,11 @@ namespace AutoReservation.BusinessLayer.Testing
     public class CustomerUpdateTest
         : TestBase
     {
-        private readonly KundeManager _target;
+        private readonly CustomerManager _target;
 
         public CustomerUpdateTest()
         {
-            _target = new KundeManager();
+            _target = new CustomerManager();
         }
         
         [Fact]

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AutoReservation.BusinessLayer
 {
-    public class AutoManager
+    public class CarManager
         : ManagerBase
     {
         // Example
