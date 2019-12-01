@@ -30,7 +30,7 @@ namespace AutoReservation.BusinessLayer.Testing
             await _target.Insert(Car);
             var insertedCar = await _target.Get(Car.Id);
             // assert
-            Assert.Equal(Car.Id, insertedCar.Id);
+            Assert.Equal(Car.Make, insertedCar.Make);
         }
 
         [Fact]
@@ -70,10 +70,11 @@ namespace AutoReservation.BusinessLayer.Testing
                 Car = await _target.Get(1);
                 // act
                 await _target.Delete(Car);
-                var deletedCar = _target.Get(Car.Id);
+                var deletedCar = await _target.Get(Car.Id);
             }
             catch (Exception e)
             {
+                // assert
                 Assert.Equal("Sequence contains no elements", e.Message);
             }
         }

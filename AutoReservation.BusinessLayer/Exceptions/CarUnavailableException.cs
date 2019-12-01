@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AutoReservation.BusinessLayer.Exceptions
 {
-    public class CarUnavailableException<T> : Exception
+    public class CarUnavailableException : Exception
     {
         public CarUnavailableException(string message) : base(message) { }
     }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AutoReservation.BusinessLayer.Exceptions
 {
-    public class InvalidDateRangeException<T> : Exception
+    public class InvalidDateRangeException : Exception
     {
         public InvalidDateRangeException(string message) : base(message) { }
     }
