@@ -12,7 +12,6 @@ namespace AutoReservation.BusinessLayer
     public class CarManager
         : ManagerBase
     {
-        // Example
         public async Task<List<Car>> GetAll()
         {
             await using CarReservationContext context = new CarReservationContext();
