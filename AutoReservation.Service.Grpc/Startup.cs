@@ -28,8 +28,8 @@ namespace AutoReservation.Service.Grpc
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<Services.AutoService>();
-                endpoints.MapGrpcService<Services.KundeService>();
+                endpoints.MapGrpcService<Services.CarService>();
+                endpoints.MapGrpcService<Services.ClientService>();
                 endpoints.MapGrpcService<Services.ReservationService>();
 
                 endpoints.MapGet("/", async context =>
