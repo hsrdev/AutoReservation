@@ -18,8 +18,10 @@ namespace AutoReservation.BusinessLayer.Testing
         }
 
         [Fact]
-        public async Task InsertCustomerTest()
+        public async Task InsertReservationTest()
         {
+            CarManager _carTarget = new CarManager();
+            CustomerManager _customerTarget = new CustomerManager();
             // arrange
             Reservation = new Reservation
             {
@@ -29,14 +31,13 @@ namespace AutoReservation.BusinessLayer.Testing
                 To = new DateTime(2019, 12,3)
             };
             // act
-            await _target.Insert(Reservation);
-            var insertedReservation = await _target.Get(5);
+            var insertedReservation = await _target.Insert(Reservation);
             // assert
             Assert.Equal(Reservation.CarId, insertedReservation.CarId);
         }
 
         [Fact]
-        public async Task UpdateCustomerTest()
+        public async Task UpdateReservationTest()
         {
             Reservation = await _target.Get(2);
             Reservation.To = new DateTime(2019, 12, 1);
@@ -60,7 +61,7 @@ namespace AutoReservation.BusinessLayer.Testing
             }
         }
         [Fact]
-        public async Task DeleteCustomerTest()
+        public async Task DeleteReservationTest()
         {
             try
             {

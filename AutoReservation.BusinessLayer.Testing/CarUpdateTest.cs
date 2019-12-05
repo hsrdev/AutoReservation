@@ -27,8 +27,7 @@ namespace AutoReservation.BusinessLayer.Testing
                 DailyRate = 100
             };
             // act
-            await _target.Insert(Car);
-            var insertedCar = await _target.Get(Car.Id);
+            var insertedCar = await _target.Insert(Car);
             // assert
             Assert.Equal(Car.Make, insertedCar.Make);
         }

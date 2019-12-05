@@ -31,13 +31,12 @@ namespace AutoReservation.BusinessLayer
             {
                 if (!DateRangeCheck(reservation))
                 {
-                    throw new InvalidDateRangeException("Reservation < 24h");
+                    throw new InvalidDateRangeException($"Reservation < 24h -> {(reservation.From - reservation.To).Hours}h");
                 }
-                if (!await AvailabilityCheck(reservation))
+                /*if (!await AvailabilityCheck(reservation))
                 {
-                    throw new CarUnavailableException("car unavailable");
-                }
-                await AvailabilityCheck(reservation);
+                    throw new CarUnavailableException($"car: {reservation.CarId} unavailable");
+                }*/
                 context.Entry(reservation).State = EntityState.Added;
                 context.SaveChanges();
                 return reservation;
@@ -64,23 +63,26 @@ namespace AutoReservation.BusinessLayer
 
         private static async Task<bool> AvailabilityCheck(Reservation reservation)
         {
-            var carManager = new CarManager();
-            var reservationCar = await carManager.Get(reservation.CarId);
-            foreach (var madeReservation in reservationCar.Reservations)
+            var _target = new CarManager();
+            var targetCar = await _target.Get(reservation.CarId);
+            if (!targetCar.Reservations.Equals(null))
             {
-                if (reservation.From < madeReservation.To)
+                foreach (var madeReservation in targetCar.Reservations)
                 {
-                    return false;
+                    if (reservation.From < madeReservation.To)
+                    {
+                        return false;
+                    }
                 }
             }
-
             return true;
         }
 
         private static bool DateRangeCheck(Reservation reservation)
         {
-            var timeDifference = (reservation.To - reservation.From).Hours;
-            if (timeDifference < 24)
+            var timeDifference = (reservation.To.Subtract(reservation.From));
+            var difference = timeDifference.TotalHours;
+            if (difference < 24)
             {
                 return false;
             }

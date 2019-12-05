@@ -28,8 +28,7 @@ namespace AutoReservation.BusinessLayer.Testing
                 BirthDate = new DateTime(2000, 1, 1)
             };
             // act
-            await _target.Insert(Customer);
-            var insertedCustomer = await _target.Get(5);
+            var insertedCustomer = await _target.Insert(Customer);
             // assert
             Assert.Equal(Customer.LastName, insertedCustomer.LastName);
         }
