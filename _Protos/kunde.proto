@@ -9,3 +9,11 @@ package AutoReservation;
 
 service KundeService {
 }
+
+message CustomerDto {
+	int32 id = 1;
+	string last_name = 2;
+	string first_name = 3;
+	google.protobuf.Timestamp birth_date = 4;
+	bytes row_version = 5;
+}

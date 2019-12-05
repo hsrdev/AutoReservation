@@ -10,101 +10,101 @@ namespace AutoReservation.Service.Grpc
 {
     internal static class DtoConverter
     {
-        #region Auto
-        private static Auto GetAutoInstance(AutoDto dto)
+        #region Car
+        private static Car GetAutoInstance(CarDto dto)
         {
-            if (dto.AutoKlasse == AutoKlasse.Standard) { return new StandardAuto(); }
-            if (dto.AutoKlasse == AutoKlasse.Mittelklasse) { return new MittelklasseAuto(); }
-            if (dto.AutoKlasse == AutoKlasse.Luxusklasse) { return new LuxusklasseAuto(); }
+            if (dto.CarClass == CarClass.Standard) { return new StandardCar(); }
+            if (dto.CarClass == CarClass.Midclass) { return new MidClassCar(); }
+            if (dto.CarClass == CarClass.Luxuryclass) { return new LuxuryClassCar(); }
             throw new ArgumentException("Unknown AutoDto implementation.", nameof(dto));
         }
-        public static Auto ConvertToEntity(this AutoDto dto)
+        public static Car ConvertToEntity(this CarDto dto)
         {
             if (dto == null) { return null; }
 
-            Auto auto = GetAutoInstance(dto);
-            auto.Id = dto.Id;
-            auto.Marke = dto.Marke;
-            auto.Tagestarif = dto.Tagestarif;
-            auto.RowVersion = dto.RowVersion.Length == 0
+            Car car = GetAutoInstance(dto);
+            car.Id = dto.Id;
+            car.Make = dto.Make;
+            car.DailyRate = dto.DailyRate;
+            car.RowVersion = dto.RowVersion.Length == 0
                 ? null
                 : dto.RowVersion.ToByteArray();
 
-            if (auto is LuxusklasseAuto luxusklasseAuto)
+            if (car is LuxuryClassCar luxuryclassCar)
             {
-                luxusklasseAuto.Basistarif = dto.Basistarif;
+                luxuryclassCar.BaseRate = dto.BaseRate;
             }
-            return auto;
+            return car;
         }
-        public static async Task<AutoDto> ConvertToDto(this Task<Auto> entityTask) => (await entityTask).ConvertToDto();
-        public static AutoDto ConvertToDto(this Auto entity)
+        public static async Task<CarDto> ConvertToDto(this Task<Car> entityTask) => (await entityTask).ConvertToDto();
+        public static CarDto ConvertToDto(this Car entity)
         {
             if (entity == null) { return null; }
 
-            AutoDto dto = new AutoDto
+            CarDto dto = new CarDto
             {
                 Id = entity.Id,
-                Marke = entity.Marke,
-                Tagestarif = entity.Tagestarif,
+                Make = entity.Make,
+                DailyRate = entity.DailyRate,
                 RowVersion = ByteString.CopyFrom(entity.RowVersion ?? new byte[0]),
             };
 
-            if (entity is StandardAuto) { dto.AutoKlasse = AutoKlasse.Standard; }
-            if (entity is MittelklasseAuto) { dto.AutoKlasse = AutoKlasse.Mittelklasse; }
-            if (entity is LuxusklasseAuto auto)
+            if (entity is StandardCar) { dto.CarClass = CarClass.Standard; }
+            if (entity is MidClassCar) { dto.CarClass = CarClass.Midclass; }
+            if (entity is LuxuryClassCar car)
             {
-                dto.AutoKlasse = AutoKlasse.Luxusklasse;
-                dto.Basistarif = auto.Basistarif;
+                dto.CarClass = CarClass.Luxuryclass;
+                dto.BaseRate = car.BaseRate;
             }
 
             return dto;
         }
-        public static List<Auto> ConvertToEntities(this IEnumerable<AutoDto> dtos)
+        public static List<Car> ConvertToEntities(this IEnumerable<CarDto> dtos)
         {
             return ConvertGenericList(dtos, ConvertToEntity);
         }
-        public static async Task<List<AutoDto>> ConvertToDtos(this Task<List<Auto>> entitiesTask) => (await entitiesTask).ConvertToDtos();
-        public static List<AutoDto> ConvertToDtos(this IEnumerable<Auto> entities)
+        public static async Task<List<CarDto>> ConvertToDtos(this Task<List<Car>> entitiesTask) => (await entitiesTask).ConvertToDtos();
+        public static List<CarDto> ConvertToDtos(this IEnumerable<Car> entities)
         {
             return ConvertGenericList(entities, ConvertToDto);
         }
         #endregion
-        #region Kunde
-        public static Kunde ConvertToEntity(this KundeDto dto)
+        #region Customer
+        public static Customer ConvertToEntity(this CustomerDto dto)
         {
             if (dto == null) { return null; }
 
-            return new Kunde
+            return new Customer
             {
                 Id = dto.Id,
-                Nachname = dto.Nachname,
-                Vorname = dto.Vorname,
-                Geburtsdatum = dto.Geburtsdatum.ToDateTime(),
+                LastName = dto.LastName,
+                FirstName = dto.FirstName,
+                BirthDate = dto.BirthDate.ToDateTime(),
                 RowVersion = dto.RowVersion.Length == 0
                     ? null
                     : dto.RowVersion.ToByteArray()
             };
         }
-        public static async Task<KundeDto> ConvertToDto(this Task<Kunde> entityTask) => (await entityTask).ConvertToDto();
-        public static KundeDto ConvertToDto(this Kunde entity)
+        public static async Task<CustomerDto> ConvertToDto(this Task<Customer> entityTask) => (await entityTask).ConvertToDto();
+        public static CustomerDto ConvertToDto(this Customer entity)
         {
             if (entity == null) { return null; }
 
-            return new KundeDto
+            return new CustomerDto
             {
                 Id = entity.Id,
-                Nachname = entity.Nachname,
-                Vorname = entity.Vorname,
-                Geburtsdatum = entity.Geburtsdatum.ToTimestampUtcFaked(),
+                LastName = entity.LastName,
+                FirstName = entity.FirstName,
+                BirthDate = entity.BirthDate.ToTimestampUtcFaked(),
                 RowVersion = ByteString.CopyFrom(entity.RowVersion ?? new byte[0]),
             };
         }
-        public static List<Kunde> ConvertToEntities(this IEnumerable<KundeDto> dtos)
+        public static List<Customer> ConvertToEntities(this IEnumerable<CustomerDto> dtos)
         {
             return ConvertGenericList(dtos, ConvertToEntity);
         }
-        public static async Task<List<KundeDto>> ConvertToDtos(this Task<List<Kunde>> entitiesTask) => (await entitiesTask).ConvertToDtos();
-        public static List<KundeDto> ConvertToDtos(this IEnumerable<Kunde> entities)
+        public static async Task<List<CustomerDto>> ConvertToDtos(this Task<List<Customer>> entitiesTask) => (await entitiesTask).ConvertToDtos();
+        public static List<CustomerDto> ConvertToDtos(this IEnumerable<Customer> entities)
         {
             return ConvertGenericList(entities, ConvertToDto);
         }
@@ -116,11 +116,11 @@ namespace AutoReservation.Service.Grpc
 
             Reservation reservation = new Reservation
             {
-                ReservationsNr = dto.ReservationsNr,
-                Von = dto.Von.ToDateTime(),
-                Bis = dto.Bis.ToDateTime(),
-                AutoId = dto.Auto.Id,
-                KundeId = dto.Kunde.Id,
+                ReservationNr = dto.ReservationNr,
+                From = dto.From.ToDateTime(),
+                To = dto.To.ToDateTime(),
+                CarId = dto.Car.Id,
+                CustomerId = dto.Customer.Id,
                 RowVersion = dto.RowVersion.Length == 0
                     ? null
                     : dto.RowVersion.ToByteArray()
@@ -135,12 +135,12 @@ namespace AutoReservation.Service.Grpc
 
             return new ReservationDto
             {
-                ReservationsNr = entity.ReservationsNr,
-                Von = entity.Von.ToTimestampUtcFaked(),
-                Bis = entity.Bis.ToTimestampUtcFaked(),
+                ReservationNr = entity.ReservationNr,
+                From = entity.From.ToTimestampUtcFaked(),
+                To = entity.To.ToTimestampUtcFaked(),
                 RowVersion = ByteString.CopyFrom(entity.RowVersion ?? new byte[0]),
-                Auto = ConvertToDto(entity.Auto),
-                Kunde = ConvertToDto(entity.Kunde)
+                Car = ConvertToDto(entity.Car),
+                Customer= ConvertToDto(entity.Customer)
             };
         }
         public static List<Reservation> ConvertToEntities(this IEnumerable<ReservationDto> dtos)

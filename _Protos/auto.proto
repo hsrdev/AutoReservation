@@ -8,3 +8,20 @@ package AutoReservation;
 
 service AutoService {
 }
+
+
+message CarDto {
+	//PrimaryKey
+	int32 id = 1;
+	string make = 2;
+	int32 daily_rate = 3;
+	bytes row_version = 4;
+	CarClass car_class = 5;
+	int32 base_rate = 6;
+}
+
+enum CarClass {
+	LUXURYCLASS = 0;
+	MIDCLASS = 1;
+	STANDARD = 2;
+}
