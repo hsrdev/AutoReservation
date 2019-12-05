@@ -25,22 +25,22 @@ namespace AutoReservation.BusinessLayer
             return context.Reservations.Single(c => c.ReservationNr == primaryKey);
         }
 
-        public async Task Insert(Reservation reservation)
+        public async Task<Reservation> Insert(Reservation reservation)
         {
             await using (CarReservationContext context = new CarReservationContext())
             {
-                try
+                if (!DateRangeCheck(reservation))
                 {
-                    DateRangeCheck(reservation);
-                    await AvailabilityCheck(reservation);
-                    context.Entry(reservation).State = EntityState.Added;
-                    context.SaveChanges();
+                    throw new InvalidDateRangeException("Reservation < 24h");
                 }
-                catch (Exception e)
+                if (!await AvailabilityCheck(reservation))
                 {
-                    Console.WriteLine(e.Message);
-                    throw;
+                    throw new CarUnavailableException("car unavailable");
                 }
+                await AvailabilityCheck(reservation);
+                context.Entry(reservation).State = EntityState.Added;
+                context.SaveChanges();
+                return reservation;
             }
         }
 
@@ -48,18 +48,8 @@ namespace AutoReservation.BusinessLayer
         {
             await using (CarReservationContext context = new CarReservationContext())
             {
-                try
-                {
-                    await AvailabilityCheck(reservation);
-                    context.Entry(reservation).State = EntityState.Modified;
-                    context.SaveChanges();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                    CreateOptimisticConcurrencyException(context, reservation);
-                }
-
+                context.Entry(reservation).State = EntityState.Modified;
+                context.SaveChanges();
             }
         }
 
@@ -72,7 +62,7 @@ namespace AutoReservation.BusinessLayer
             }
         }
 
-        private static async Task AvailabilityCheck(Reservation reservation)
+        private static async Task<bool> AvailabilityCheck(Reservation reservation)
         {
             var carManager = new CarManager();
             var reservationCar = await carManager.Get(reservation.CarId);
@@ -80,19 +70,22 @@ namespace AutoReservation.BusinessLayer
             {
                 if (reservation.From < madeReservation.To)
                 {
-                    throw new CarUnavailableException($"{reservationCar.Id} not available until {madeReservation.To}");
+                    return false;
                 }
             }
+
+            return true;
         }
 
-        private static void DateRangeCheck(Reservation reservation)
+        private static bool DateRangeCheck(Reservation reservation)
         {
-            var timeDifference = reservation.To.Hour - reservation.From.Hour;
-            if ( timeDifference < 24 || reservation.To < reservation.From)
+            var timeDifference = (reservation.To - reservation.From).Hours;
+            if (timeDifference < 24)
             {
-                throw new InvalidDateRangeException("Invalid Reservation Range");
+                return false;
             }
 
+            return true;
         }
     }
 }

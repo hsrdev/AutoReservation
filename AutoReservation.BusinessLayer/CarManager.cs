@@ -25,12 +25,14 @@ namespace AutoReservation.BusinessLayer
             return context.Cars.Single(c => c.Id == primaryKey);
         }
 
-        public async Task Insert(Car car)
+        public async Task<Car> Insert(Car car)
         {
             await using (CarReservationContext context = new CarReservationContext())
             {
+
                 context.Entry(car).State = EntityState.Added;
                 context.SaveChanges();
+                return car;
             }
         }
 
