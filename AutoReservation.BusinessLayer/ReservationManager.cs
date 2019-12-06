@@ -47,6 +47,10 @@ namespace AutoReservation.BusinessLayer
         {
             await using (CarReservationContext context = new CarReservationContext())
             {
+                if (!DateRangeCheck(reservation))
+                {
+                    throw new InvalidDateRangeException($"Reservation < 24h -> {(reservation.From - reservation.To).Hours}h");
+                }
                 context.Entry(reservation).State = EntityState.Modified;
                 context.SaveChanges();
             }
@@ -78,7 +82,7 @@ namespace AutoReservation.BusinessLayer
             return true;
         }
 
-        private static bool DateRangeCheck(Reservation reservation)
+        public bool DateRangeCheck(Reservation reservation)
         {
             var timeDifference = (reservation.To.Subtract(reservation.From));
             var difference = timeDifference.TotalHours;

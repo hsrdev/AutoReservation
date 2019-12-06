@@ -20,8 +20,6 @@ namespace AutoReservation.BusinessLayer.Testing
         [Fact]
         public async Task InsertReservationTest()
         {
-            CarManager _carTarget = new CarManager();
-            CustomerManager _customerTarget = new CustomerManager();
             // arrange
             Reservation = new Reservation
             {
