@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoReservation.Dal.Entities;
 using AutoReservation.Service.Grpc.Testing.Common;
+using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Xunit;
@@ -20,66 +23,114 @@ namespace AutoReservation.Service.Grpc.Testing
 
 
         [Fact]
-        public async Task GetAutosTest()
+        public async Task GetCarsTest()
         {
-            throw new NotImplementedException("Test not implemented.");
             // arrange
+            var request = new Empty();
+
             // act
+            GetAllCarsResponse reply = _target.GetAllCars(request);
+            var list = reply.Data;
+
             // assert
+            Assert.Equal(4, list.Count );
+            
+            
         }
 
         [Fact]
-        public async Task GetAutoByIdTest()
+        public async Task GetCarsByIdTest()
         {
-            throw new NotImplementedException("Test not implemented.");
             // arrange
+            var requestId = new GetCarRequest { IdFilter = 2 };
+
             // act
+            CarDto reply = _target.GetCar(requestId);
+
             // assert
+            Assert.Equal("VW Golf", reply.Make);
+
+        }
+
+    
+    
+        [Fact]
+        public async Task GetCarByIdWithIllegalIdTest()
+        {
+            // arrange
+            var requestId = new GetCarRequest { IdFilter = 9 };
+
+            // act
+
+            // assert
+            Assert.Throws<RpcException>(()=>_target.GetCar(requestId));
+
         }
 
         [Fact]
-        public async Task GetAutoByIdWithIllegalIdTest()
+        public async Task InsertCarTest()
         {
-            throw new NotImplementedException("Test not implemented.");
             // arrange
+            CarDto car1 = new CarDto
+            {
+                Make = "Volvo V40",
+                DailyRate = 100,
+            };
             // act
+            var requestInsert = car1;
+            CarDto carToInsert = _target.InsertCar(requestInsert);
             // assert
+            var requestId = new GetCarRequest { IdFilter = carToInsert.Id };
+            CarDto insertedCar = _target.GetCar(requestId);
+
+            Assert.Equal(carToInsert.Id, insertedCar.Id);
+            Assert.Equal("Volvo V40", insertedCar.Make);
         }
 
         [Fact]
-        public async Task InsertAutoTest()
+        public async Task DeleteCarTest()
         {
-            throw new NotImplementedException("Test not implemented.");
-            // arrange
+            var requestId = new GetCarRequest { IdFilter = 4 };
+
+            CarDto toDelete = _target.GetCar(requestId);
             // act
+            Empty emptyDelete = _target.DeleteCar(toDelete);
             // assert
+            Assert.Throws<RpcException>(() => _target.GetCar(requestId));
         }
 
         [Fact]
-        public async Task DeleteAutoTest()
+        public async Task UpdateCarTest()
         {
-            throw new NotImplementedException("Test not implemented.");
-            // arrange
-            // act
+            //arrange
+            var requestId = new GetCarRequest { IdFilter = 3 };
+            CarDto toUpdate = _target.GetCar(requestId);
+
+            //act
+            toUpdate.Make = "Subaru";
+            Empty emptyUpdate = _target.UpdateCar(toUpdate);
+
             // assert
+            toUpdate = _target.GetCar(requestId);
+            Assert.Equal("Subaru", toUpdate.Make);
         }
 
         [Fact]
-        public async Task UpdateAutoTest()
+        public async Task UpdateCarWithOptimisticConcurrencyTest()
         {
-            throw new NotImplementedException("Test not implemented.");
-            // arrange
-            // act
-            // assert
-        }
+            //arrange
+            var requestId = new GetCarRequest { IdFilter = 3 };
+            CarDto toUpdate = _target.GetCar(requestId);
+            CarDto secondToUpdate = _target.GetCar(requestId);
 
-        [Fact]
-        public async Task UpdateAutoWithOptimisticConcurrencyTest()
-        {
-            throw new NotImplementedException("Test not implemented.");
-            // arrange
-            // act
+            //act
+            toUpdate.Make = "Subaru";
+
+            Empty emptyUpdate = _target.UpdateCar(toUpdate);
+            toUpdate.Make = "BMW";
             // assert
+            Assert.Throws<RpcException>(() => _target.UpdateCar(toUpdate));
+
         }
     }
 }

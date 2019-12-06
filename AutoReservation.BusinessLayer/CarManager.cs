@@ -48,7 +48,7 @@ namespace AutoReservation.BusinessLayer
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
-                    CreateOptimisticConcurrencyException(context, car);
+                    throw CreateOptimisticConcurrencyException(context, car);
                 }
 
             }

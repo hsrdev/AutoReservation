@@ -7,8 +7,20 @@ option csharp_namespace = "AutoReservation.Service.Grpc";
 package AutoReservation;
 
 service AutoService {
+	rpc GetAllCars(google.protobuf.Empty) returns (GetAllCarsResponse);
+	rpc GetCar(GetCarRequest) returns (CarDto);
+	rpc InsertCar(CarDto) returns (CarDto);
+	rpc UpdateCar(CarDto) returns (google.protobuf.Empty);
+	rpc DeleteCar(CarDto) returns (google.protobuf.Empty);
 }
 
+message GetAllCarsResponse{
+	repeated CarDto data=1;
+}
+
+message GetCarRequest {
+	int32 id_filter = 1;
+}
 
 message CarDto {
 	//PrimaryKey
