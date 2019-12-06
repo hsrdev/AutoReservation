@@ -4,6 +4,10 @@ using AutoReservation.Service.Grpc.Testing.Common;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Xunit;
+using System.Collections.Generic;
+using AutoReservation.Dal.Entities;
+using Google.Protobuf;
+
 
 namespace AutoReservation.Service.Grpc.Testing
 {
@@ -19,66 +23,109 @@ namespace AutoReservation.Service.Grpc.Testing
         }
 
         [Fact]
-        public async Task GetKundenTest()
+        public async Task GetCustomersTest()
         {
-            throw new NotImplementedException("Test not implemented.");
             // arrange
+            var request = new Empty();
+
             // act
+            GetAllCustomersResponse reply = _target.GetAllCustomers(request);
+            var list = reply.Data;
+
             // assert
+            Assert.Equal(4, list.Count);
         }
 
         [Fact]
-        public async Task GetKundeByIdTest()
+        public async Task GetCustomerByIdTest()
         {
-            throw new NotImplementedException("Test not implemented.");
             // arrange
+            var requestId = new GetCustomerRequest { IdFilter = 2 };
+
             // act
+            CustomerDto reply = _target.GetCustomer(requestId);
+
             // assert
+            Assert.Equal("Beil", reply.LastName);
         }
 
         [Fact]
-        public async Task GetKundeByIdWithIllegalIdTest()
+        public async Task GetCustomerByIdWithIllegalIdTest()
         {
-            throw new NotImplementedException("Test not implemented.");
             // arrange
+            var requestId = new GetCustomerRequest { IdFilter = 12 };
+
             // act
+
             // assert
+            Assert.Throws<RpcException>(() => _target.GetCustomer(requestId));
         }
 
         [Fact]
-        public async Task InsertKundeTest()
+        public async Task InsertCustomerTest()
         {
-            throw new NotImplementedException("Test not implemented.");
             // arrange
+            DateTime date = new DateTime(2000, 1, 1, 0,0,0, DateTimeKind.Utc);
+            CustomerDto cust = new CustomerDto
+            {
+                FirstName = "Niels",
+                LastName = "Müller",
+                BirthDate = date.ToTimestamp()
+            };
             // act
+            var requestInsert = cust;
+            CustomerDto customerToInsert = _target.InsertCustomer(requestInsert);
             // assert
+            var requestId = new GetCustomerRequest { IdFilter = customerToInsert.Id };
+            CustomerDto insertedCustomer = _target.GetCustomer(requestId);
+
+            Assert.Equal(customerToInsert.Id, insertedCustomer.Id);
+            Assert.Equal("Müller", insertedCustomer.LastName);
         }
 
         [Fact]
-        public async Task DeleteKundeTest()
+        public async Task DeleteCustomerTest()
         {
-            throw new NotImplementedException("Test not implemented.");
-            // arrange
+            var requestId = new GetCustomerRequest { IdFilter = 4 };
+
+            CustomerDto toDelete = _target.GetCustomer(requestId);
             // act
+            Empty emptyDelete = _target.DeleteCustomer(toDelete);
             // assert
+            Assert.Throws<RpcException>(() => _target.GetCustomer(requestId));
         }
 
         [Fact]
-        public async Task UpdateKundeTest()
+        public async Task UpdateCustomerTest()
         {
-            throw new NotImplementedException("Test not implemented.");
-            // arrange
-            // act
+            //arrange
+            var requestId = new GetCustomerRequest { IdFilter = 3 };
+            CustomerDto toUpdate = _target.GetCustomer(requestId);
+
+            //act
+            toUpdate.FirstName = "Anna-Lena";
+            Empty emptyUpdate = _target.UpdateCustomer(toUpdate);
+
             // assert
+            toUpdate = _target.GetCustomer(requestId);
+            Assert.Equal("Anna-Lena", toUpdate.FirstName);
         }
 
         [Fact]
-        public async Task UpdateKundeWithOptimisticConcurrencyTest()
+        public async Task UpdateCustomerWithOptimisticConcurrencyTest()
         {
-            throw new NotImplementedException("Test not implemented.");
-            // arrange
-            // act
+            //arrange
+            var requestId = new GetCustomerRequest { IdFilter = 3 };
+            CustomerDto toUpdate = _target.GetCustomer(requestId);
+            CustomerDto secondToUpdate = _target.GetCustomer(requestId);
+
+            //act
+            toUpdate.FirstName = "Anna-Lena";
+
+            Empty emptyUpdate = _target.UpdateCustomer(toUpdate);
+            toUpdate.FirstName = "Anna-Lisa";
             // assert
+            Assert.Throws<RpcException>(() => _target.UpdateCustomer(toUpdate));
         }
     }
 }
