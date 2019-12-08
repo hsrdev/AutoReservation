@@ -83,7 +83,10 @@ namespace AutoReservation.BusinessLayer
             foreach (var targetReservation in targetCarReservations)
             {
                 if (IsFromDateInTargetReservationRange(reservation.From, targetReservation)
-                    || IsToDateInTargetReservationRange(reservation.To, targetReservation)) return false;
+                    || IsToDateInTargetReservationRange(reservation.To, targetReservation))
+                {
+                    return false;
+                }
             }
 
             return true;
