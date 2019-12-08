@@ -32,7 +32,7 @@ namespace AutoReservation.BusinessLayer
                 if (!DateRangeCheck(reservation))
                 {
                     throw new InvalidDateRangeException(
-                        $"Reservation < 24h -> {(reservation.From - reservation.To).Hours}h");
+                        $"Reservation < 24h -> {(reservation.From - reservation.To).TotalHours}h");
                 }
 
                 if (!await AvailabilityCheck(reservation))
@@ -53,7 +53,7 @@ namespace AutoReservation.BusinessLayer
                 if (!DateRangeCheck(reservation))
                 {
                     throw new InvalidDateRangeException(
-                        $"Reservation < 24h -> {(reservation.From - reservation.To).Hours}h");
+                        $"Reservation < 24h -> {(reservation.From - reservation.To).TotalHours}h");
                 }
 
                 if (!await AvailabilityCheck(reservation))
@@ -78,23 +78,28 @@ namespace AutoReservation.BusinessLayer
         public async Task<bool> AvailabilityCheck(Reservation reservation)
         {
             var allReservations = await GetAll();
-            var targetCarReservations = allReservations.FindAll(c => c.CarId == reservation.CarId);
+            var targetCarReservations = allReservations.FindAll(r => r.CarId == reservation.CarId);
+            if (isUpdateOfReservation(targetCarReservations, reservation.ReservationNr)) return true;
             foreach (var targetReservation in targetCarReservations)
             {
-                if (reservation.ReservationNr == targetReservation.ReservationNr) return true;
-                if (IsDateInTargetReservationFromRange(reservation.From, targetReservation)
-                    || IsDateInTargetReservationToRange(reservation.To, targetReservation)) return false;
+                if (IsFromDateInTargetReservationRange(reservation.From, targetReservation)
+                    || IsToDateInTargetReservationRange(reservation.To, targetReservation)) return false;
             }
 
             return true;
         }
 
-        private bool IsDateInTargetReservationFromRange(DateTime reservationDate, Reservation targetReservation)
+        private bool isUpdateOfReservation(List<Reservation> targetReservations, int reservationNr)
+        {
+            return !targetReservations.Find(r => r.ReservationNr == reservationNr).Equals(null);
+        }
+
+        private bool IsFromDateInTargetReservationRange(DateTime reservationDate, Reservation targetReservation)
         {
             return reservationDate >= targetReservation.From && reservationDate < targetReservation.To;
         }
 
-        private bool IsDateInTargetReservationToRange(DateTime reservationDate, Reservation targetReservation)
+        private bool IsToDateInTargetReservationRange(DateTime reservationDate, Reservation targetReservation)
         {
             return reservationDate > targetReservation.From && reservationDate < targetReservation.To;
         }
