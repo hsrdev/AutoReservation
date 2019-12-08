@@ -47,83 +47,119 @@ namespace AutoReservation.BusinessLayer.Testing
                 To = new DateTime(Year, 03, 10)
             };
             // act & assert
+            Assert.True(await _target.AvailabilityCheck(Reservation));
         }
 
         [Fact]
         public async Task ScenarioOkay03Test()
         {
-            throw new NotImplementedException("Test not implemented.");
             // arrange
-            //                | ---Date 1--- |
-            //| ---Date 2-- - |
-            // act
-            // assert
+            //               | ---Date 1--- |
+            //| ---Date 2--- |
+            Reservation = new Reservation
+            {
+                CarId = 1,
+                From = new DateTime(Year, 01, 01),
+                To = new DateTime(Year, 01, 10)
+            };
+            // act & assert
+            Assert.True(await _target.AvailabilityCheck(Reservation));
         }
 
         [Fact]
         public async Task ScenarioOkay04Test()
         {
-            throw new NotImplementedException("Test not implemented.");
             // arrange
             //                | ---Date 1--- |
             //| ---Date 2--- |
-            // act
-            // assert
+            Reservation = new Reservation
+            {
+                CarId = 2,
+                From = new DateTime(Year, 01, 01),
+                To = new DateTime(Year, 01, 08)
+            };
+            // act & assert
+            Assert.True(await _target.AvailabilityCheck(Reservation));
         }
 
         [Fact]
         public async Task ScenarioNotOkay01Test()
         {
-            throw new NotImplementedException("Test not implemented.");
             // arrange
             //| ---Date 1--- |
             //    | ---Date 2--- |
-            // act
-            // assert
+            Reservation = new Reservation
+            {
+                CarId = 1,
+                From = new DateTime(Year, 01, 15),
+                To = new DateTime(Year, 01, 30)
+            };
+            // act & assert
+            Assert.False(await _target.AvailabilityCheck(Reservation));
         }
 
         [Fact]
         public async Task ScenarioNotOkay02Test()
         {
-            throw new NotImplementedException("Test not implemented.");
             // arrange
             //    | ---Date 1--- |
             //| ---Date 2--- |
-            // act
-            // assert
+            Reservation = new Reservation
+            {
+                CarId = 1,
+                From = new DateTime(Year, 01, 01),
+                To = new DateTime(Year, 01, 15)
+            };
+            // act & assert
+            Assert.False(await _target.AvailabilityCheck(Reservation));
         }
 
         [Fact]
         public async Task ScenarioNotOkay03Test()
         {
-            throw new NotImplementedException("Test not implemented.");
             // arrange
             //| ---Date 1--- |
             //| --------Date 2-------- |
-            // act
-            // assert
+            Reservation = new Reservation
+            {
+                CarId = 1,
+                From = new DateTime(Year, 01, 10),
+                To = new DateTime(Year, 01, 30)
+            };
+            // act & assert
+            Assert.False(await _target.AvailabilityCheck(Reservation));
         }
 
         [Fact]
         public async Task ScenarioNotOkay04Test()
         {
-            throw new NotImplementedException("Test not implemented.");
             // arrange
             //| --------Date 1-------- |
             //| ---Date 2--- |
-            // act
-            // assert
+            Reservation = new Reservation
+            {
+                CarId = 1,
+                From = new DateTime(Year, 01, 10),
+                To = new DateTime(Year, 01, 15)
+            };
+            // act & assert
+            Assert.False(await _target.AvailabilityCheck(Reservation));
         }
 
         [Fact]
         public async Task ScenarioNotOkay05Test()
         {
-            throw new NotImplementedException("Test not implemented.");
             // arrange
             //| ---Date 1--- |
             //| ---Date 2--- |
-            // act
-            // assert
+            Reservation = new Reservation
+            {
+                CarId = 1,
+                From = new DateTime(Year, 01, 10),
+                To = new DateTime(Year, 01, 20)
+            };
+            // act & assert
+            Assert.False(await _target.AvailabilityCheck(Reservation));
         }
     }
 }

@@ -42,7 +42,7 @@ namespace AutoReservation.BusinessLayer.Testing
             // arrange
             Reservation = new Reservation
             {
-                From = new DateTime(Year, 11, 01,12, 00, 00),
+                From = new DateTime(Year, 11, 01, 12, 00, 00),
                 To = new DateTime(Year, 12, 01, 15, 00, 00)
             };
             // act & assert
@@ -55,7 +55,7 @@ namespace AutoReservation.BusinessLayer.Testing
             // arrange
             Reservation = new Reservation
             {
-                From = new DateTime(Year, 12, 15, 12 , 00, 00),
+                From = new DateTime(Year, 12, 15, 12, 00, 00),
                 To = new DateTime(Year, 12, 16, 08, 00, 00)
             };
             // act & assert
@@ -68,7 +68,7 @@ namespace AutoReservation.BusinessLayer.Testing
             // arrange
             Reservation = new Reservation
             {
-                From = new DateTime(Year, 12,16),
+                From = new DateTime(Year, 12, 16),
                 To = new DateTime(Year, 12, 13)
             };
             // act & assert

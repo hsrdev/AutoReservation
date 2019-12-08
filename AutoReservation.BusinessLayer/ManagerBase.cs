@@ -5,10 +5,11 @@ namespace AutoReservation.BusinessLayer
 {
     public abstract class ManagerBase
     {
-        protected static OptimisticConcurrencyException<T> CreateOptimisticConcurrencyException<T>(CarReservationContext context, T entity)
+        protected static OptimisticConcurrencyException<T> CreateOptimisticConcurrencyException<T>(
+            CarReservationContext context, T entity)
             where T : class
         {
-            T dbEntity = (T)context.Entry(entity)
+            T dbEntity = (T) context.Entry(entity)
                 .GetDatabaseValues()
                 .ToObject();
 

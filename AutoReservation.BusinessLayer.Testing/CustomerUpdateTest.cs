@@ -16,7 +16,7 @@ namespace AutoReservation.BusinessLayer.Testing
         {
             _target = new CustomerManager();
         }
-        
+
         [Fact]
         public async Task InsertCustomerTest()
         {
@@ -57,6 +57,7 @@ namespace AutoReservation.BusinessLayer.Testing
                 Assert.Equal("Sequence contains no elements", e.Message);
             }
         }
+
         [Fact]
         public async Task DeleteCustomerTest()
         {

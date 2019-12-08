@@ -6,8 +6,10 @@ namespace AutoReservation.Dal.Entities
     {
         //PrimaryKey
         public int ReservationNr { get; set; }
+
         //ForeignKey
         public int CarId { get; set; }
+
         //ForeignKey
         public int CustomerId { get; set; }
         public DateTime From { get; set; }

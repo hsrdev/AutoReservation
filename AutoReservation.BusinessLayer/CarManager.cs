@@ -28,7 +28,6 @@ namespace AutoReservation.BusinessLayer
         {
             await using (CarReservationContext context = new CarReservationContext())
             {
-
                 context.Entry(car).State = EntityState.Added;
                 context.SaveChanges();
                 return car;
@@ -49,7 +48,6 @@ namespace AutoReservation.BusinessLayer
                     Console.WriteLine(e.Message);
                     throw CreateOptimisticConcurrencyException(context, car);
                 }
-
             }
         }
 

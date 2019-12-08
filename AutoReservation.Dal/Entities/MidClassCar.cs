@@ -6,6 +6,5 @@ namespace AutoReservation.Dal.Entities
 {
     public class MidClassCar : Car
     {
-
     }
 }

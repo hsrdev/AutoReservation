@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AutoReservation.BusinessLayer
 {
-    public class CustomerManager
         : ManagerBase
     {
         public async Task<List<Customer>> GetAll()
