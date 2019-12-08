@@ -11,7 +11,7 @@ namespace AutoReservation.BusinessLayer.Testing
     {
         private readonly ReservationManager _target;
         public Reservation Reservation { get; set; }
-
+        public int Year = DateTime.Now.Year + 1;
         public ReservationUpdateTest()
         {
             _target = new ReservationManager();
@@ -25,8 +25,8 @@ namespace AutoReservation.BusinessLayer.Testing
             {
                 CarId = 1,
                 CustomerId = 1,
-                From = new DateTime(2019, 12,1),
-                To = new DateTime(2019, 12,3)
+                From = new DateTime(Year, 12,01),
+                To = new DateTime(Year, 12,03)
             };
             // act
             var insertedReservation = await _target.Insert(Reservation);
@@ -38,7 +38,7 @@ namespace AutoReservation.BusinessLayer.Testing
         public async Task UpdateReservationTest()
         {
             Reservation = await _target.Get(2);
-            Reservation.To = new DateTime(2019, 12, 1);
+            Reservation.To = new DateTime(Year, 12, 01);
             await _target.Update(Reservation);
             var updatedReservation = await _target.Get(2);
             Assert.Equal(Reservation.To, updatedReservation.To);
@@ -58,6 +58,7 @@ namespace AutoReservation.BusinessLayer.Testing
                 Assert.Equal("Sequence contains no elements", e.Message);
             }
         }
+        
         [Fact]
         public async Task DeleteReservationTest()
         {

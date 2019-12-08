@@ -31,8 +31,10 @@ namespace AutoReservation.BusinessLayer
             {
                 if (!DateRangeCheck(reservation))
                 {
-                    throw new InvalidDateRangeException($"Reservation < 24h -> {(reservation.From - reservation.To).Hours}h");
+                    throw new InvalidDateRangeException(
+                        $"Reservation < 24h -> {(reservation.From - reservation.To).Hours}h");
                 }
+
                 /*if (!await AvailabilityCheck(reservation))
                 {
                     throw new CarUnavailableException($"car: {reservation.CarId} unavailable");
@@ -49,8 +51,10 @@ namespace AutoReservation.BusinessLayer
             {
                 if (!DateRangeCheck(reservation))
                 {
-                    throw new InvalidDateRangeException($"Reservation < 24h -> {(reservation.From - reservation.To).Hours}h");
+                    throw new InvalidDateRangeException(
+                        $"Reservation < 24h -> {(reservation.From - reservation.To).Hours}h");
                 }
+
                 context.Entry(reservation).State = EntityState.Modified;
                 context.SaveChanges();
             }
@@ -65,28 +69,33 @@ namespace AutoReservation.BusinessLayer
             }
         }
 
-        private static async Task<bool> AvailabilityCheck(Reservation reservation)
+        public async Task<bool> AvailabilityCheck(Reservation reservation)
         {
-            var _target = new CarManager();
-            var targetCar = await _target.Get(reservation.CarId);
-            if (!targetCar.Reservations.Equals(null))
+            var allReservations = await GetAll();
+            var targetCarReservations = allReservations.FindAll(c => c.CarId == reservation.CarId);
+            foreach (var targetReservation in targetCarReservations)
             {
-                foreach (var madeReservation in targetCar.Reservations)
+                if (IsDateInTargetReservationRange(reservation.From, targetReservation) || IsDateInTargetReservationRange(reservation.To, targetReservation))
                 {
-                    if (reservation.From < madeReservation.To)
-                    {
-                        return false;
-                    }
+                    return false;
                 }
             }
+
             return true;
         }
 
+        private bool IsDateInTargetReservationRange(DateTime reservationDate, Reservation targetReservation)
+        {
+            return reservationDate >= targetReservation.From && reservationDate < targetReservation.To;
+
+        }
+
+
+
         public bool DateRangeCheck(Reservation reservation)
         {
-            var timeDifference = (reservation.To.Subtract(reservation.From));
-            var difference = timeDifference.TotalHours;
-            if (difference < 24)
+            var timeDifference = reservation.To.Subtract(reservation.From).TotalHours;
+            if (timeDifference < 24 || reservation.From < DateTime.Now)
             {
                 return false;
             }

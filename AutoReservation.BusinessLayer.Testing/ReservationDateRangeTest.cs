@@ -11,6 +11,7 @@ namespace AutoReservation.BusinessLayer.Testing
     {
         private readonly ReservationManager _target;
         public Reservation Reservation { get; set; }
+        public int Year = DateTime.Now.Year + 1;
 
         public ReservationDateRangeTest()
         {
@@ -25,8 +26,8 @@ namespace AutoReservation.BusinessLayer.Testing
             {
                 CarId = 1,
                 CustomerId = 1,
-                From = new DateTime(2019, 12, 1),
-                To = new DateTime(2019, 12, 3)
+                From = new DateTime(Year, 12, 01),
+                To = new DateTime(Year, 12, 03)
             };
             // act
             var insertedReservation = await _target.Insert(Reservation);
@@ -41,8 +42,8 @@ namespace AutoReservation.BusinessLayer.Testing
             // arrange
             Reservation = new Reservation
             {
-                From = new DateTime(2019, 11, 1,12, 0, 0),
-                To = new DateTime(2019, 12, 1, 15, 0, 0)
+                From = new DateTime(Year, 11, 01,12, 00, 00),
+                To = new DateTime(Year, 12, 01, 15, 00, 00)
             };
             // act & assert
             Assert.True(_target.DateRangeCheck(Reservation));
@@ -54,8 +55,8 @@ namespace AutoReservation.BusinessLayer.Testing
             // arrange
             Reservation = new Reservation
             {
-                From = new DateTime(2019, 12, 15, 12 , 0, 0),
-                To = new DateTime(2019, 12, 16, 8, 0, 0)
+                From = new DateTime(Year, 12, 15, 12 , 00, 00),
+                To = new DateTime(Year, 12, 16, 08, 00, 00)
             };
             // act & assert
             Assert.False(_target.DateRangeCheck(Reservation));
@@ -67,8 +68,8 @@ namespace AutoReservation.BusinessLayer.Testing
             // arrange
             Reservation = new Reservation
             {
-                From = new DateTime(2019, 12,16),
-                To = new DateTime(2019, 12, 13)
+                From = new DateTime(Year, 12,16),
+                To = new DateTime(Year, 12, 13)
             };
             // act & assert
             Assert.False(_target.DateRangeCheck(Reservation));
@@ -80,8 +81,8 @@ namespace AutoReservation.BusinessLayer.Testing
             // arrange
             Reservation = new Reservation
             {
-                From = new DateTime(2019, 12, 16),
-                To = new DateTime(2019, 12, 16)
+                From = new DateTime(Year, 12, 16),
+                To = new DateTime(Year, 12, 16)
             };
             // act & assert
             Assert.False(_target.DateRangeCheck(Reservation));

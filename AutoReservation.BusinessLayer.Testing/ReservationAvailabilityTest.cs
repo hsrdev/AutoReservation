@@ -1,6 +1,7 @@
-﻿using System;
+﻿    using System;
 using System.Threading.Tasks;
-using AutoReservation.TestEnvironment;
+    using AutoReservation.Dal.Entities;
+    using AutoReservation.TestEnvironment;
 using Xunit;
 
 namespace AutoReservation.BusinessLayer.Testing
@@ -9,6 +10,8 @@ namespace AutoReservation.BusinessLayer.Testing
         : TestBase
     {
         private readonly ReservationManager _target;
+        public Reservation Reservation { get; set; }
+        public int Year = DateTime.Now.Year + 1;
 
         public ReservationAvailabilityTest()
         {
@@ -18,23 +21,32 @@ namespace AutoReservation.BusinessLayer.Testing
         [Fact]
         public async Task ScenarioOkay01Test()
         {
-            throw new NotImplementedException("Test not implemented.");
             // arrange
             //| ---Date 1--- |
             //               | ---Date 2--- |
-            // act
-            // assert
+            Reservation = new Reservation
+            {
+                CarId = 1,
+                From = new DateTime(Year, 01,20),
+                To = new DateTime(Year, 01, 30)
+            };
+            // act & assert
+            Assert.True(await _target.AvailabilityCheck(Reservation));
         }
 
         [Fact]
         public async Task ScenarioOkay02Test()
         {
-            throw new NotImplementedException("Test not implemented.");
             // arrange
             //| ---Date 1--- |
             //                 | ---Date 2--- |
-            // act
-            // assert
+            Reservation = new Reservation
+            {
+                CarId = 2,
+                From = new DateTime(Year, 03, 01),
+                To = new DateTime(Year, 03, 10)
+            };
+            // act & assert
         }
 
         [Fact]
