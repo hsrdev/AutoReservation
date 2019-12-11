@@ -94,7 +94,7 @@ namespace AutoReservation.BusinessLayer
 
         private bool isUpdateOfReservation(List<Reservation> targetReservations, int reservationNr)
         {
-            return !targetReservations.Find(r => r.ReservationNr == reservationNr).Equals(null);
+            return targetReservations.Exists(r => r.ReservationNr == reservationNr);
         }
 
         private bool IsFromDateInTargetReservationRange(DateTime reservationDate, Reservation targetReservation)
