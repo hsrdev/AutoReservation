@@ -78,8 +78,8 @@ namespace AutoReservation.BusinessLayer
         public async Task<bool> AvailabilityCheck(Reservation reservation)
         {
             var allReservations = await GetAll();
-            var targetCarReservations = allReservations.FindAll(r => r.CarId == reservation.CarId);
-            if (isUpdateOfReservation(targetCarReservations, reservation.ReservationNr)) return true;
+            var targetCarReservations = allReservations.FindAll(r => r.CarId == reservation.CarId && r.ReservationNr != reservation.ReservationNr);
+            //if (isUpdateOfReservation(targetCarReservations, reservation.ReservationNr)) return true;
             foreach (var targetReservation in targetCarReservations)
             {
                 if (IsFromDateInTargetReservationRange(reservation.From, targetReservation)
@@ -92,10 +92,10 @@ namespace AutoReservation.BusinessLayer
             return true;
         }
 
-        private bool isUpdateOfReservation(List<Reservation> targetReservations, int reservationNr)
+        /*private bool isUpdateOfReservation(List<Reservation> targetReservations, int reservationNr)
         {
             return targetReservations.Exists(r => r.ReservationNr == reservationNr);
-        }
+        }*/
 
         private bool IsFromDateInTargetReservationRange(DateTime reservationDate, Reservation targetReservation)
         {
