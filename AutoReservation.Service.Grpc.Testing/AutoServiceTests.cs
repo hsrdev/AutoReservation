@@ -39,7 +39,7 @@ namespace AutoReservation.Service.Grpc.Testing
         }
 
         [Fact]
-        public async Task GetCarsByIdTest()
+        public async Task GetCarByIdTest()
         {
             // arrange
             var requestId = new GetCarRequest { IdFilter = 2 };

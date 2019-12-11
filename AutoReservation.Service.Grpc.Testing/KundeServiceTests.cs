@@ -117,7 +117,6 @@ namespace AutoReservation.Service.Grpc.Testing
             //arrange
             var requestId = new GetCustomerRequest { IdFilter = 3 };
             CustomerDto toUpdate = _target.GetCustomer(requestId);
-            CustomerDto secondToUpdate = _target.GetCustomer(requestId);
 
             //act
             toUpdate.FirstName = "Anna-Lena";
