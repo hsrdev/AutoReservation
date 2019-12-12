@@ -14,14 +14,13 @@ namespace AutoReservation.BusinessLayer
         public async Task<List<Car>> GetAll()
         {
             await using CarReservationContext context = new CarReservationContext();
-
             return await context.Cars.Include(c => c.Reservations).ToListAsync();
         }
 
         public async Task<Car> Get(int primaryKey)
         {
             await using CarReservationContext context = new CarReservationContext();
-            return context.Cars.Include(c => c.Reservations).Single(c => c.Id == primaryKey);
+            return await context.Cars.Include(c => c.Reservations).SingleAsync(c => c.Id == primaryKey);
         }
 
         public async Task<Car> Insert(Car car)
@@ -29,7 +28,7 @@ namespace AutoReservation.BusinessLayer
             await using (CarReservationContext context = new CarReservationContext())
             {
                 context.Entry(car).State = EntityState.Added;
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 return car;
             }
         }
@@ -41,7 +40,7 @@ namespace AutoReservation.BusinessLayer
                 try
                 {
                     context.Entry(car).State = EntityState.Modified;
-                    context.SaveChanges();
+                    await context.SaveChangesAsync();
                 }
                 catch (Exception e)
                 {
@@ -56,7 +55,7 @@ namespace AutoReservation.BusinessLayer
             await using (CarReservationContext context = new CarReservationContext())
             {
                 context.Entry(car).State = EntityState.Deleted;
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
         }
     }

@@ -15,15 +15,14 @@ namespace AutoReservation.BusinessLayer
         public async Task<List<Reservation>> GetAll()
         {
             await using CarReservationContext context = new CarReservationContext();
-
             return await context.Reservations.Include(r => r.Car).Include(r => r.Customer).ToListAsync();
         }
 
         public async Task<Reservation> Get(int primaryKey)
         {
             await using CarReservationContext context = new CarReservationContext();
-            return context.Reservations.Include(r => r.Car).Include(r => r.Customer)
-                .Single(c => c.ReservationNr == primaryKey);
+            return await context.Reservations.Include(r => r.Car).Include(r => r.Customer)
+                .SingleAsync(c => c.ReservationNr == primaryKey);
         }
 
         public async Task<Reservation> Insert(Reservation reservation)
@@ -42,7 +41,7 @@ namespace AutoReservation.BusinessLayer
                 }
 
                 context.Entry(reservation).State = EntityState.Added;
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 return reservation;
             }
         }
@@ -63,7 +62,7 @@ namespace AutoReservation.BusinessLayer
                 }
 
                 context.Entry(reservation).State = EntityState.Modified;
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
         }
 
@@ -72,7 +71,7 @@ namespace AutoReservation.BusinessLayer
             await using (CarReservationContext context = new CarReservationContext())
             {
                 context.Entry(reservation).State = EntityState.Deleted;
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
         }
 
@@ -93,11 +92,6 @@ namespace AutoReservation.BusinessLayer
 
             return true;
         }
-
-        /*private bool isUpdateOfReservation(List<Reservation> targetReservations, int reservationNr)
-        {
-            return targetReservations.Exists(r => r.ReservationNr == reservationNr);
-        }*/
 
         private bool IsFromDateInTargetReservationRange(DateTime reservationDate, Reservation targetReservation)
         {
