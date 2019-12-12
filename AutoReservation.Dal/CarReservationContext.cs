@@ -23,6 +23,9 @@ namespace AutoReservation.Dal
                 .ToTable("Cars")
                 .Property(e => e.RowVersion)
                 .IsRowVersion();
+            modelBuilder.Entity<Car>()
+                .Property(e => e.Make)
+                .HasColumnType("NVARCHAR(20)");
             modelBuilder.Entity<StandardCar>()
                 .HasBaseType<Car>();
             modelBuilder.Entity<LuxuryClassCar>()
@@ -33,10 +36,21 @@ namespace AutoReservation.Dal
 
         private void CreateCustomerTable(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Customer>()
-                .ToTable("Customers")
+            var customerBuilder = modelBuilder.Entity<Customer>();
+            customerBuilder
+                .ToTable("Customers");
+            customerBuilder
+                .Property(e => e.FirstName)
+                .HasColumnType("NVARCHAR(20)");
+            customerBuilder
+                .Property(e => e.LastName)
+                .HasColumnType("NVARCHAR(20)");
+            customerBuilder
                 .Property(e => e.RowVersion)
                 .IsRowVersion();
+
+
+            
         }
 
         private void CreateReservationTable(ModelBuilder modelBuilder)
