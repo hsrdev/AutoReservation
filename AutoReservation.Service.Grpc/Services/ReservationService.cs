@@ -15,10 +15,6 @@ namespace AutoReservation.Service.Grpc.Services
     {
         private readonly ILogger<ReservationService> _logger;
         private readonly ReservationManager _reservationManager = new ReservationManager();
-        //TODO: Client oder Business?
-        private readonly CarManager _carManager = new CarManager();
-        private readonly CustomerManager _customerManager = new CustomerManager();
-        // ---
         public ReservationService(ILogger<ReservationService> logger)
         {
             _logger = logger;
@@ -40,10 +36,7 @@ namespace AutoReservation.Service.Grpc.Services
             try
             {
                 Reservation data = await _reservationManager.Get(request.IdFilter);
-                //TODO: Client oder Business?
-                data.Car = await _carManager.Get(data.CarId);
-                data.Customer = await _customerManager.Get(data.CustomerId);
-                // ---
+                
                 response = data.ConvertToDto();
             }
             catch (System.Exception e)
@@ -60,11 +53,6 @@ namespace AutoReservation.Service.Grpc.Services
             try
             {
                 Reservation result = await _reservationManager.Insert(reservation);
-                
-                //TODO: Client oder Business?
-                result.Car = await _carManager.Get(result.CarId);
-                result.Customer = await _customerManager.Get(result.CustomerId);
-                //---
 
                 return result.ConvertToDto();
             }

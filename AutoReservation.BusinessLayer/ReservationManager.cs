@@ -14,20 +14,27 @@ namespace AutoReservation.BusinessLayer
     {
         public async Task<List<Reservation>> GetAll()
         {
-            await using CarReservationContext context = new CarReservationContext();
+            using CarReservationContext context = new CarReservationContext();
             return await context.Reservations.Include(r => r.Car).Include(r => r.Customer).ToListAsync();
         }
 
         public async Task<Reservation> Get(int primaryKey)
         {
-            await using CarReservationContext context = new CarReservationContext();
-            return await context.Reservations.Include(r => r.Car).Include(r => r.Customer)
-                .SingleAsync(c => c.ReservationNr == primaryKey);
+            try
+            {
+                using CarReservationContext context = new CarReservationContext();
+                return await context.Reservations.Include(r => r.Car).Include(r => r.Customer)
+                    .SingleAsync(c => c.ReservationNr == primaryKey);
+            }
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException(ex.Message, ex);
+            }
         }
 
         public async Task<Reservation> Insert(Reservation reservation)
         {
-            await using (CarReservationContext context = new CarReservationContext())
+            using (CarReservationContext context = new CarReservationContext())
             {
                 if (!DateRangeCheck(reservation))
                 {
@@ -42,13 +49,17 @@ namespace AutoReservation.BusinessLayer
 
                 context.Entry(reservation).State = EntityState.Added;
                 await context.SaveChangesAsync();
+
+                reservation.Car = await context.Cars.FindAsync(reservation.CarId);
+                await context.Entry(reservation).Reference(r => r.Customer).LoadAsync();
+
                 return reservation;
             }
         }
 
         public async Task Update(Reservation reservation)
         {
-            await using (CarReservationContext context = new CarReservationContext())
+            using (CarReservationContext context = new CarReservationContext())
             {
                 if (!DateRangeCheck(reservation))
                 {
@@ -68,7 +79,7 @@ namespace AutoReservation.BusinessLayer
 
         public async Task Delete(Reservation reservation)
         {
-            await using (CarReservationContext context = new CarReservationContext())
+            using (CarReservationContext context = new CarReservationContext())
             {
                 context.Entry(reservation).State = EntityState.Deleted;
                 await context.SaveChangesAsync();

@@ -30,7 +30,6 @@ namespace AutoReservation.Service.Grpc.Testing
             // act
             GetAllReservationsResponse reply = _target.GetAllReservations(request);
             var list = reply.Data;
-            
             // assert
             Assert.Equal(4, list.Count);
         }
