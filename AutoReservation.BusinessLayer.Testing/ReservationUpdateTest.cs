@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoReservation.Dal.Entities;
 using AutoReservation.TestEnvironment;
@@ -57,34 +58,24 @@ namespace AutoReservation.BusinessLayer.Testing
         [Fact]
         public async Task NotExistingAccessTest()
         {
-            try
-            {
-                // arrange & act
-                Reservation = await _target.Get(5);
-            }
-            catch (Exception e)
-            {
-                // assert
-                Assert.Equal("Sequence contains no elements", e.Message);
-            }
+            var ex = await Assert.ThrowsAsync<KeyNotFoundException>(async () =>
+                await _target.Get(5)
+            );
+           
         }
 
         [Fact]
         public async Task DeleteReservationTest()
         {
-            try
-            {
-                // arrange
-                Reservation = await _target.Get(1);
-                // act
-                await _target.Delete(Reservation);
-                var deletedReservation = await _target.Get(Reservation.ReservationNr);
-            }
-            catch (Exception e)
-            {
-                // assert
-                Assert.Equal("Sequence contains no elements", e.Message);
-            }
+            // arrange
+            Reservation = await _target.Get(1);
+            // act
+            await _target.Delete(Reservation);
+            var ex = await Assert.ThrowsAsync<KeyNotFoundException>(async () =>
+                await _target.Get(Reservation.ReservationNr)
+            );
+
+
         }
 
         [Fact]

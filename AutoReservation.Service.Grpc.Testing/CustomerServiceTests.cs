@@ -11,12 +11,12 @@ using Google.Protobuf;
 
 namespace AutoReservation.Service.Grpc.Testing
 {
-    public class KundeServiceTests
+    public class CustomerServiceTests
         : ServiceTestBase
     {
         private readonly KundeService.KundeServiceClient _target;
 
-        public KundeServiceTests(ServiceTestFixture serviceTestFixture)
+        public CustomerServiceTests(ServiceTestFixture serviceTestFixture)
             : base(serviceTestFixture)
         {
             _target = new KundeService.KundeServiceClient(Channel);

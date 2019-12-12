@@ -13,19 +13,26 @@ namespace AutoReservation.BusinessLayer
     {
         public async Task<List<Car>> GetAll()
         {
-            await using CarReservationContext context = new CarReservationContext();
+            using CarReservationContext context = new CarReservationContext();
             return await context.Cars.Include(c => c.Reservations).ToListAsync();
         }
 
         public async Task<Car> Get(int primaryKey)
         {
-            await using CarReservationContext context = new CarReservationContext();
-            return await context.Cars.Include(c => c.Reservations).SingleAsync(c => c.Id == primaryKey);
+            try
+            {
+                using CarReservationContext context = new CarReservationContext();
+                return await context.Cars.Include(c => c.Reservations).SingleAsync(c => c.Id == primaryKey);
+            }
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException(ex.Message, ex);
+            }
         }
 
         public async Task<Car> Insert(Car car)
         {
-            await using (CarReservationContext context = new CarReservationContext())
+            using (CarReservationContext context = new CarReservationContext())
             {
                 context.Entry(car).State = EntityState.Added;
                 await context.SaveChangesAsync();
@@ -35,7 +42,7 @@ namespace AutoReservation.BusinessLayer
 
         public async Task Update(Car car)
         {
-            await using (CarReservationContext context = new CarReservationContext())
+            using (CarReservationContext context = new CarReservationContext())
             {
                 try
                 {
@@ -52,7 +59,7 @@ namespace AutoReservation.BusinessLayer
 
         public async Task Delete(Car car)
         {
-            await using (CarReservationContext context = new CarReservationContext())
+            using (CarReservationContext context = new CarReservationContext())
             {
                 context.Entry(car).State = EntityState.Deleted;
                 await context.SaveChangesAsync();

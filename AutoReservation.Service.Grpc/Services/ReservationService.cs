@@ -15,10 +15,6 @@ namespace AutoReservation.Service.Grpc.Services
     {
         private readonly ILogger<ReservationService> _logger;
         private readonly ReservationManager _reservationManager = new ReservationManager();
-        //TODO: Client oder Business?
-        private readonly CarManager _carManager = new CarManager();
-        private readonly CustomerManager _customerManager = new CustomerManager();
-        // ---
         public ReservationService(ILogger<ReservationService> logger)
         {
             _logger = logger;
@@ -40,15 +36,12 @@ namespace AutoReservation.Service.Grpc.Services
             try
             {
                 Reservation data = await _reservationManager.Get(request.IdFilter);
-                //TODO: Client oder Business?
-                data.Car = await _carManager.Get(data.CarId);
-                data.Customer = await _customerManager.Get(data.CustomerId);
-                // ---
+                
                 response = data.ConvertToDto();
             }
             catch (System.Exception e)
             {
-                throw new RpcException(new Status(StatusCode.NotFound, "Reservation key not found"));
+                throw new RpcException(new Status(StatusCode.NotFound, e.Message));
             }
 
             return await Task.FromResult(response);
@@ -60,21 +53,16 @@ namespace AutoReservation.Service.Grpc.Services
             try
             {
                 Reservation result = await _reservationManager.Insert(reservation);
-                
-                //TODO: Client oder Business?
-                result.Car = await _carManager.Get(result.CarId);
-                result.Customer = await _customerManager.Get(result.CustomerId);
-                //---
 
                 return result.ConvertToDto();
             }
             catch (InvalidDateRangeException e)
             {
-                throw new RpcException(new Status(StatusCode.InvalidArgument, "DateRange is invalid"));
+                throw new RpcException(new Status(StatusCode.InvalidArgument, e.Message));
             }
-            catch (CarUnavailableException)
+            catch (CarUnavailableException ex)
             {
-                throw new RpcException(new Status(StatusCode.FailedPrecondition, "Car is not available"));
+                throw new RpcException(new Status(StatusCode.FailedPrecondition, ex.Message));
             }
 
         }
@@ -90,15 +78,15 @@ namespace AutoReservation.Service.Grpc.Services
             }
             catch (OptimisticConcurrencyException<Reservation> e)
             {
-                throw new RpcException(new Status(StatusCode.FailedPrecondition, "Reservation update went wrong"));
+                throw new RpcException(new Status(StatusCode.FailedPrecondition, e.Message));
             }
-            catch (CarUnavailableException)
+            catch (CarUnavailableException e)
             {
-                throw new RpcException(new Status(StatusCode.FailedPrecondition, "Car is not available"));
+                throw new RpcException(new Status(StatusCode.FailedPrecondition, e.Message));
             }
-            catch (InvalidDateRangeException)
+            catch (InvalidDateRangeException e)
             {
-                throw new RpcException(new Status(StatusCode.InvalidArgument, "DateRange is not valid"));
+                throw new RpcException(new Status(StatusCode.InvalidArgument, e.Message));
             }
             Empty empt = new Empty();
             return empt;

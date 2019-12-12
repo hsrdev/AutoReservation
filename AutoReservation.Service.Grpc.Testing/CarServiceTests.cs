@@ -10,12 +10,12 @@ using Xunit;
 
 namespace AutoReservation.Service.Grpc.Testing
 {
-    public class AutoServiceTests
+    public class CarServiceTests
         : ServiceTestBase
     {
         private readonly AutoService.AutoServiceClient _target;
 
-        public AutoServiceTests(ServiceTestFixture serviceTestFixture)
+        public CarServiceTests(ServiceTestFixture serviceTestFixture)
             : base(serviceTestFixture)
         {
             _target = new AutoService.AutoServiceClient(Channel);

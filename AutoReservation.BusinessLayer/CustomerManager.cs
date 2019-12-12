@@ -12,19 +12,27 @@ namespace AutoReservation.BusinessLayer
     {
         public async Task<List<Customer>> GetAll()
         {
-            await using CarReservationContext context = new CarReservationContext();
+            using CarReservationContext context = new CarReservationContext();
             return await context.Customers.Include(c => c.Reservations).ToListAsync();
         }
 
         public async Task<Customer> Get(int primaryKey)
         {
-            await using CarReservationContext context = new CarReservationContext();
-            return await context.Customers.Include(c => c.Reservations).SingleAsync(c => c.Id == primaryKey);
+            using CarReservationContext context = new CarReservationContext();
+            try
+            {
+                return await context.Customers.Include(c => c.Reservations).SingleAsync(c => c.Id == primaryKey);
+
+            }
+            catch (Exception ex)
+            {
+                throw new KeyNotFoundException(ex.Message, ex);
+            }        
         }
 
         public async Task<Customer> Insert(Customer customer)
         {
-            await using (CarReservationContext context = new CarReservationContext())
+            using (CarReservationContext context = new CarReservationContext())
             {
                 context.Entry(customer).State = EntityState.Added;
                 await context.SaveChangesAsync();
@@ -34,7 +42,7 @@ namespace AutoReservation.BusinessLayer
 
         public async Task Update(Customer customer)
         {
-            await using (CarReservationContext context = new CarReservationContext())
+            using (CarReservationContext context = new CarReservationContext())
             {
                 try
                 {
@@ -51,7 +59,7 @@ namespace AutoReservation.BusinessLayer
 
         public async Task Delete(Customer customer)
         {
-            await using (CarReservationContext context = new CarReservationContext())
+            using (CarReservationContext context = new CarReservationContext())
             {
                 context.Entry(customer).State = EntityState.Deleted;
                 await context.SaveChangesAsync();
