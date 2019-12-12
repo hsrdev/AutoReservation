@@ -21,7 +21,9 @@ namespace AutoReservation.BusinessLayer.Testing
         [Fact]
         public async Task GetReservationWithCarAndCustomer()
         {
+            // arrange & act
             Reservation = await _target.Get(1);
+            // assert
             Assert.Equal(1, Reservation.CarId);
             Assert.NotNull(Reservation.Car);
             Assert.NotNull(Reservation.Customer);

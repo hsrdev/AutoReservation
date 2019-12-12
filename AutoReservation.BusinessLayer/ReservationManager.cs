@@ -22,7 +22,8 @@ namespace AutoReservation.BusinessLayer
         public async Task<Reservation> Get(int primaryKey)
         {
             await using CarReservationContext context = new CarReservationContext();
-            return context.Reservations.Include(r => r.Car).Include(r => r.Customer).Single(c => c.ReservationNr == primaryKey);
+            return context.Reservations.Include(r => r.Car).Include(r => r.Customer)
+                .Single(c => c.ReservationNr == primaryKey);
         }
 
         public async Task<Reservation> Insert(Reservation reservation)
@@ -78,7 +79,8 @@ namespace AutoReservation.BusinessLayer
         public async Task<bool> AvailabilityCheck(Reservation reservation)
         {
             var allReservations = await GetAll();
-            var targetCarReservations = allReservations.FindAll(r => r.CarId == reservation.CarId && r.ReservationNr != reservation.ReservationNr);
+            var targetCarReservations = allReservations.FindAll(r =>
+                r.CarId == reservation.CarId && r.ReservationNr != reservation.ReservationNr);
             //if (isUpdateOfReservation(targetCarReservations, reservation.ReservationNr)) return true;
             foreach (var targetReservation in targetCarReservations)
             {

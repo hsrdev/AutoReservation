@@ -20,17 +20,17 @@ namespace AutoReservation.BusinessLayer.Testing
         [Fact]
         public async Task GetCarAndReservations()
         {
+            // arrange & act
             Car = await _target.Get(1);
+            // assert
             Assert.Equal(1, Car.Id);
             Assert.NotNull(Car.Reservations);
         }
 
-
-
         [Fact]
         public async Task InsertCarTest()
         {
-            //arrange
+            // arrange
             Car = new StandardCar()
             {
                 Make = "Volvo V40",
@@ -51,7 +51,7 @@ namespace AutoReservation.BusinessLayer.Testing
             // act
             await _target.Update(Car);
             var updatedCar = await _target.Get(Car.Id);
-            //assert
+            // assert
             Assert.Equal(Car.DailyRate, updatedCar.DailyRate);
         }
 

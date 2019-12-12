@@ -8,8 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AutoReservation.BusinessLayer
 {
-   
-    public class CustomerManager  : ManagerBase
+    public class CustomerManager : ManagerBase
     {
         public async Task<List<Customer>> GetAll()
         {
@@ -48,7 +47,6 @@ namespace AutoReservation.BusinessLayer
                     Console.WriteLine(e.Message);
                     throw CreateOptimisticConcurrencyException(context, customer);
                 }
-
             }
         }
 
