@@ -24,7 +24,7 @@ namespace AutoReservation.TestEnvironment
         protected override void PrepareDatabase()
         {
             // First execution
-            lock (LockObject)
+            /*lock (LockObject)
             {
                 if (_firstTestInExecution)
                 {
@@ -33,7 +33,7 @@ namespace AutoReservation.TestEnvironment
                     _firstTestInExecution = false;
                     return;
                 }
-            }
+            }*/
 
             // Subsequent executions
             Context.Database.EnsureCreated();

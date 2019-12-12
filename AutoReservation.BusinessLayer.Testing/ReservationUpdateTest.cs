@@ -31,21 +31,6 @@ namespace AutoReservation.BusinessLayer.Testing
         }
 
         [Fact]
-        public async Task InsertReservationTest()
-        {
-            // arrange
-            Reservation = new Reservation
-            {
-                From = new DateTime(Year, 12, 01),
-                To = new DateTime(Year, 12, 03)
-            };
-            // act
-            var insertedReservation = await _target.Insert(Reservation);
-            // assert
-            Assert.Equal(Reservation.CarId, insertedReservation.CarId);
-        }
-
-        [Fact]
         public async Task UpdateReservationTest()
         {
             Reservation = await _target.Get(2);
