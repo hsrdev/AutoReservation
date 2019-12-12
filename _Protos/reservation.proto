@@ -15,7 +15,7 @@ service ReservationService {
 	rpc InsertReservation(ReservationDto) returns (ReservationDto);
 	rpc UpdateReservation(ReservationDto) returns (google.protobuf.Empty);
 	rpc DeleteReservation(ReservationDto) returns (google.protobuf.Empty);
-	//rpc AvailabilityCheck(ReservationDto) returns (CheckResponse);
+	rpc AvailabilityCheck(ReservationDto) returns (CheckResponse);
 	//rpc DateRangeCheck(ReservationDto) returns (CheckResponse);
 }
 
@@ -26,9 +26,9 @@ message GetAllReservationsResponse{
 message GetReservationRequest {
 	int32 id_filter = 1;
 }
-/*message CheckResponse {
+message CheckResponse {
 	bool is_valid = 1;
-}*/
+}
 message ReservationDto {
 	//PrimaryKey
     int32 reservation_nr = 1;
