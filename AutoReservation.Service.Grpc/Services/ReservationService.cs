@@ -41,7 +41,7 @@ namespace AutoReservation.Service.Grpc.Services
             }
             catch (System.Exception e)
             {
-                throw new RpcException(new Status(StatusCode.NotFound, "Reservation key not found"));
+                throw new RpcException(new Status(StatusCode.NotFound, e.Message));
             }
 
             return await Task.FromResult(response);
@@ -58,11 +58,11 @@ namespace AutoReservation.Service.Grpc.Services
             }
             catch (InvalidDateRangeException e)
             {
-                throw new RpcException(new Status(StatusCode.InvalidArgument, "DateRange is invalid"));
+                throw new RpcException(new Status(StatusCode.InvalidArgument, e.Message));
             }
-            catch (CarUnavailableException)
+            catch (CarUnavailableException ex)
             {
-                throw new RpcException(new Status(StatusCode.FailedPrecondition, "Car is not available"));
+                throw new RpcException(new Status(StatusCode.FailedPrecondition, ex.Message));
             }
 
         }
@@ -78,15 +78,15 @@ namespace AutoReservation.Service.Grpc.Services
             }
             catch (OptimisticConcurrencyException<Reservation> e)
             {
-                throw new RpcException(new Status(StatusCode.FailedPrecondition, "Reservation update went wrong"));
+                throw new RpcException(new Status(StatusCode.FailedPrecondition, e.Message));
             }
-            catch (CarUnavailableException)
+            catch (CarUnavailableException e)
             {
-                throw new RpcException(new Status(StatusCode.FailedPrecondition, "Car is not available"));
+                throw new RpcException(new Status(StatusCode.FailedPrecondition, e.Message));
             }
-            catch (InvalidDateRangeException)
+            catch (InvalidDateRangeException e)
             {
-                throw new RpcException(new Status(StatusCode.InvalidArgument, "DateRange is not valid"));
+                throw new RpcException(new Status(StatusCode.InvalidArgument, e.Message));
             }
             Empty empt = new Empty();
             return empt;

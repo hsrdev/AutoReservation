@@ -40,7 +40,7 @@ namespace AutoReservation.Service.Grpc.Services
             }
             catch (System.Exception e)
             {
-                throw new RpcException(new Status(StatusCode.NotFound, "Customer key not found"));
+                throw new RpcException(new Status(StatusCode.NotFound, e.Message));
             }
 
             return await Task.FromResult(response);
@@ -66,7 +66,7 @@ namespace AutoReservation.Service.Grpc.Services
             }
             catch (BusinessLayer.Exceptions.OptimisticConcurrencyException<Customer> e)
             {
-                throw new RpcException(new Status(StatusCode.FailedPrecondition, "Customer update went wrong"));
+                throw new RpcException(new Status(StatusCode.FailedPrecondition, e.Message));
             }
             Empty empt = new Empty();
             return empt;
