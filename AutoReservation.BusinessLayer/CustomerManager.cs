@@ -15,13 +15,13 @@ namespace AutoReservation.BusinessLayer
         {
             await using CarReservationContext context = new CarReservationContext();
 
-            return await context.Customers.ToListAsync();
+            return await context.Customers.Include(c => c.Reservations).ToListAsync();
         }
 
         public async Task<Customer> Get(int primaryKey)
         {
             await using CarReservationContext context = new CarReservationContext();
-            return context.Customers.Single(c => c.Id == primaryKey);
+            return context.Customers.Include(c => c.Reservations).Single(c => c.Id == primaryKey);
         }
 
         public async Task<Customer> Insert(Customer customer)

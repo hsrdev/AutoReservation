@@ -18,6 +18,14 @@ namespace AutoReservation.BusinessLayer.Testing
         }
 
         [Fact]
+        public async Task GetCustomerWithReservation()
+        {
+            Customer = await _target.Get(1);
+            Assert.Equal(1, Customer.Id);
+            Assert.NotNull(Customer.Reservations);
+        }
+
+        [Fact]
         public async Task InsertCustomerTest()
         {
             // arrange

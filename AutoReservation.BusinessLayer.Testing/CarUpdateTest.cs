@@ -18,6 +18,16 @@ namespace AutoReservation.BusinessLayer.Testing
         }
 
         [Fact]
+        public async Task GetCarAndReservations()
+        {
+            Car = await _target.Get(1);
+            Assert.Equal(1, Car.Id);
+            Assert.NotNull(Car.Reservations);
+        }
+
+
+
+        [Fact]
         public async Task InsertCarTest()
         {
             //arrange
